@@ -10,7 +10,7 @@ namespace Microsoft.VisualStudio.Jdt
     /// <summary>
     /// Logger wrapper for JDT transformations
     /// </summary>
-    internal class JsonTransformationContextLogger
+    public class JsonTransformationContextLogger
     {
         private readonly IJsonTransformationLogger externalLogger = null;
 

@@ -9,14 +9,14 @@ namespace Microsoft.VisualStudio.Jdt
     /// <summary>
     /// Represents the Rename transformation
     /// </summary>
-    internal class JdtRename : JdtArrayProcessor
+    public class JdtRename : JdtArrayProcessor
     {
         private readonly JdtAttributeValidator attributeValidator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JdtRename"/> class.
         /// </summary>
-        public JdtRename()
+        internal JdtRename()
         {
             // Rename accepts the path and value attributes
             this.attributeValidator = new JdtAttributeValidator(JdtAttributes.Path, JdtAttributes.Value);

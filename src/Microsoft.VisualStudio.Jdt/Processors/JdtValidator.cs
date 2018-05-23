@@ -11,7 +11,7 @@ namespace Microsoft.VisualStudio.Jdt
     /// <summary>
     /// Validates the JDT verbs in the transformation
     /// </summary>
-    internal class JdtValidator : JdtProcessor
+    public class JdtValidator : JdtProcessor
     {
         /// <summary>
         /// Gets set of the valid verbs for the transformation
@@ -22,7 +22,7 @@ namespace Microsoft.VisualStudio.Jdt
         public override string Verb { get; } = null;
 
         /// <inheritdoc/>
-        internal override void Process(JObject source, JObject transform, JsonTransformationContextLogger logger)
+        public override void Process(JObject source, JObject transform, JsonTransformationContextLogger logger)
         {
             if (source == null)
             {

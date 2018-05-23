@@ -9,14 +9,14 @@ namespace Microsoft.VisualStudio.Jdt
     /// <summary>
     /// Represents the Merge transformation
     /// </summary>
-    internal class JdtMerge : JdtArrayProcessor
+    public class JdtMerge : JdtArrayProcessor
     {
         private readonly JdtAttributeValidator attributeValidator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JdtMerge"/> class.
         /// </summary>
-        public JdtMerge()
+        internal JdtMerge()
         {
             // Merge accepts path and value attributes
             this.attributeValidator = new JdtAttributeValidator(JdtAttributes.Path, JdtAttributes.Value);

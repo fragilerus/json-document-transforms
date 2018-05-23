@@ -11,13 +11,13 @@ namespace Microsoft.VisualStudio.Jdt
     /// <summary>
     /// Represents a recursive JDT transformation
     /// </summary>
-    internal class JdtRecurse : JdtProcessor
+    public class JdtRecurse : JdtProcessor
     {
         /// <inheritdoc/>
         public override string Verb { get; } = null;
 
         /// <inheritdoc/>
-        internal override void Process(JObject source, JObject transform, JsonTransformationContextLogger logger)
+        public override void Process(JObject source, JObject transform, JsonTransformationContextLogger logger)
         {
             if (source == null)
             {

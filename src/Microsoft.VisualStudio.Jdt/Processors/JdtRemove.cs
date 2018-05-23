@@ -9,14 +9,14 @@ namespace Microsoft.VisualStudio.Jdt
     /// <summary>
     /// Represents the Remove transformation
     /// </summary>
-    internal class JdtRemove : JdtArrayProcessor
+    public class JdtRemove : JdtArrayProcessor
     {
         private readonly JdtAttributeValidator attributeValidator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JdtRemove"/> class.
         /// </summary>
-        public JdtRemove()
+        internal JdtRemove()
         {
             // Remove only accepts the path attribute
             this.attributeValidator = new JdtAttributeValidator(JdtAttributes.Path);

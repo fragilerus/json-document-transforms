@@ -9,10 +9,9 @@ namespace Microsoft.VisualStudio.Jdt
     /// <summary>
     /// Represents a transformation
     /// </summary>
-    internal abstract partial class JdtProcessor
+    public abstract partial class JdtProcessor
     {
         private static readonly JdtProcessorChain ProcessorChain = new JdtProcessorChain();
-
         private JdtProcessor successor;
 
         /// <summary>
@@ -51,6 +50,14 @@ namespace Microsoft.VisualStudio.Jdt
         }
 
         /// <summary>
+        /// Executes the transformation
+        /// </summary>
+        /// <param name="source">Object to be transformed</param>
+        /// <param name="transform">Object specifying the transformation</param>
+        /// <param name="logger">The logger for the transformation</param>
+        public abstract void Process(JObject source, JObject transform, JsonTransformationContextLogger logger);
+
+        /// <summary>
         /// Executes the entire transformation with the given objects
         /// Mutates the source object
         /// </summary>
@@ -72,13 +79,5 @@ namespace Microsoft.VisualStudio.Jdt
             // Passes in a clone of the transform object because it can be altered during the transformation process
             ProcessorChain.Start(source, (JObject)transform.CloneWithLineInfo(), logger);
         }
-
-        /// <summary>
-        /// Executes the transformation
-        /// </summary>
-        /// <param name="source">Object to be transformed</param>
-        /// <param name="transform">Object specifying the transformation</param>
-        /// <param name="logger">The logger for the transformation</param>
-        internal abstract void Process(JObject source, JObject transform, JsonTransformationContextLogger logger);
     }
 }

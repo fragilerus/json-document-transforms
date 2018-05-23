@@ -7,6 +7,8 @@ namespace Microsoft.VisualStudio.Jdt.Tests
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
     using Xunit;
 
     /// <summary>
@@ -261,8 +263,8 @@ namespace Microsoft.VisualStudio.Jdt.Tests
             string transformString = @"{ 
                                          '@jdt.invalid': false 
                                        }";
-            using (var transformStream = this.GetStreamFromString(transformString))
-            using (var sourceStream = this.GetStreamFromString(SimpleSourceString))
+            using (var transformStream = TestUtilities.GetStreamFromString(transformString))
+            using (var sourceStream = TestUtilities.GetStreamFromString(SimpleSourceString))
             {
                 JsonTransformation transform = new JsonTransformation(transformStream, this.logger);
                 var exception = Record.Exception(() => transform.Apply(sourceStream));
@@ -299,6 +301,42 @@ namespace Microsoft.VisualStudio.Jdt.Tests
             }
         }
 
+        /// <summary>
+        /// Tests that the transformation process will call additional transformations that were added
+        /// </summary>
+        [Fact]
+        public void CallAditionalProcessors()
+        {
+            const string TransformSourceString = @"{
+                                                        '@jdt.add' : {
+                                                            'name': 'myprop',
+                                                            'value': 6
+                                                        }
+                                                    }";
+            const string sourceString = "{ 'myprop' : 5 }";
+            try
+            {
+                JdtProcessorRegistry.Insert(1, new SimpleAddTransform("add"));
+                JObject result;
+                using (var transformStream = TestUtilities.GetStreamFromString(TransformSourceString))
+                using (var sourceStream = TestUtilities.GetStreamFromString(sourceString))
+                {
+                    var transformed = new JsonTransformation(transformStream, this.logger).Apply(sourceStream);
+                    using (var transformedReader = new StreamReader(transformed))
+                    using (var jsonReader = new JsonTextReader(transformedReader))
+                    {
+                        result = JObject.Load(jsonReader);
+                    }
+                }
+
+                Assert.Equal(11, result.GetValue("myprop").Value<int>());
+            }
+            finally
+            {
+                JdtProcessorRegistry.Reset();
+            }
+        }
+
         private static void LogHasSingleEntry(List<JsonTransformationTestLogger.TestLogEntry> log, string fileName, int lineNumber, int linePosition, bool fromException)
         {
             Assert.Single(log);
@@ -311,8 +349,8 @@ namespace Microsoft.VisualStudio.Jdt.Tests
 
         private void TryTransformTest(string sourceString, string transformString, bool shouldTransformSucceed)
         {
-            using (var transformStream = this.GetStreamFromString(transformString))
-            using (var sourceStream = this.GetStreamFromString(sourceString))
+            using (var transformStream = TestUtilities.GetStreamFromString(transformString))
+            using (var sourceStream = TestUtilities.GetStreamFromString(sourceString))
             {
                 JsonTransformation transform = new JsonTransformation(transformStream, this.logger);
 
@@ -339,15 +377,23 @@ namespace Microsoft.VisualStudio.Jdt.Tests
             }
         }
 
-        private Stream GetStreamFromString(string s)
+        private class SimpleAddTransform : JdtArrayProcessor
         {
-            MemoryStream stringStream = new MemoryStream();
-            StreamWriter stringWriter = new StreamWriter(stringStream);
-            stringWriter.Write(s);
-            stringWriter.Flush();
-            stringStream.Position = 0;
+            public SimpleAddTransform(string verb)
+            {
+                this.Verb = verb;
+            }
 
-            return stringStream;
+            public override string Verb { get; }
+
+            protected override bool ProcessCore(JObject source, JToken transformValue, JsonTransformationContextLogger logger)
+            {
+                var transformObj = (JObject)transformValue;
+                var propName = transformObj.GetValue("name").Value<string>();
+                var original = source[propName].Value<int>();
+                source[propName] = original + transformObj.GetValue("value").Value<int>();
+                return true;
+            }
         }
     }
 }

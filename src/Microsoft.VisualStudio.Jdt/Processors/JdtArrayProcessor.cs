@@ -9,10 +9,10 @@ namespace Microsoft.VisualStudio.Jdt
     /// <summary>
     /// Base for a processor that handles array values
     /// </summary>
-    internal abstract class JdtArrayProcessor : JdtProcessor
+    public abstract class JdtArrayProcessor : JdtProcessor
     {
         /// <inheritdoc/>
-        internal override void Process(JObject source, JObject transform, JsonTransformationContextLogger logger)
+        public override void Process(JObject source, JObject transform, JsonTransformationContextLogger logger)
         {
             if (source == null)
             {

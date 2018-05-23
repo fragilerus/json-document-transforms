@@ -9,14 +9,14 @@ namespace Microsoft.VisualStudio.Jdt
     /// <summary>
     /// Represents the Replace transformation
     /// </summary>
-    internal class JdtReplace : JdtArrayProcessor
+    public class JdtReplace : JdtArrayProcessor
     {
         private readonly JdtAttributeValidator attributeValidator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JdtReplace"/> class.
         /// </summary>
-        public JdtReplace()
+        internal JdtReplace()
         {
             this.attributeValidator = new JdtAttributeValidator(JdtAttributes.Path, JdtAttributes.Value);
         }

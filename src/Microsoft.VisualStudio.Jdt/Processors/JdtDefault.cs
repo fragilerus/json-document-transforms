@@ -10,13 +10,13 @@ namespace Microsoft.VisualStudio.Jdt
     /// <summary>
     /// Represents the default JDT transformation
     /// </summary>
-    internal class JdtDefault : JdtProcessor
+    public class JdtDefault : JdtProcessor
     {
         /// <inheritdoc/>
         public override string Verb { get; } = null;
 
         /// <inheritdoc/>
-        internal override void Process(JObject source, JObject transform, JsonTransformationContextLogger logger)
+        public override void Process(JObject source, JObject transform, JsonTransformationContextLogger logger)
         {
             if (source == null)
             {
