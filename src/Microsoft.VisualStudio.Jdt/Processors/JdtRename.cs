@@ -1,9 +1,10 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 
-namespace Microsoft.VisualStudio.Jdt
+namespace Microsoft.VisualStudio.Jdt.Processors
 {
     using System.Linq;
+    using Attributes;
     using Newtonsoft.Json.Linq;
 
     /// <summary>
@@ -19,7 +20,7 @@ namespace Microsoft.VisualStudio.Jdt
         internal JdtRename()
         {
             // Rename accepts the path and value attributes
-            this.attributeValidator = new JdtAttributeValidator(JdtAttributes.Path, JdtAttributes.Value);
+            this.attributeValidator = new JdtAttributeValidator(JdtStandardAttribute.Path, JdtStandardAttribute.Value);
         }
 
         /// <inheritdoc/>
@@ -44,7 +45,7 @@ namespace Microsoft.VisualStudio.Jdt
                 {
                     // If the object has attributes it must have both path and value
                     JToken pathToken, valueToken;
-                    if (attributes.TryGetValue(JdtAttributes.Path, out pathToken) && attributes.TryGetValue(JdtAttributes.Value, out valueToken))
+                    if (attributes.TryGetValue(JdtStandardAttribute.Path, out pathToken) && attributes.TryGetValue(JdtStandardAttribute.Value, out valueToken))
                     {
                         if (pathToken.Type != JTokenType.String)
                         {

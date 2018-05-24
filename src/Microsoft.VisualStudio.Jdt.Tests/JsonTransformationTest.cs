@@ -9,6 +9,7 @@ namespace Microsoft.VisualStudio.Jdt.Tests
     using System.Linq;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
+    using Processors;
     using Xunit;
 
     /// <summary>

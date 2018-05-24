@@ -1,9 +1,10 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 
-namespace Microsoft.VisualStudio.Jdt
+namespace Microsoft.VisualStudio.Jdt.Processors
 {
     using System.Linq;
+    using Attributes;
     using Newtonsoft.Json.Linq;
 
     /// <summary>
@@ -19,7 +20,7 @@ namespace Microsoft.VisualStudio.Jdt
         internal JdtRemove()
         {
             // Remove only accepts the path attribute
-            this.attributeValidator = new JdtAttributeValidator(JdtAttributes.Path);
+            this.attributeValidator = new JdtAttributeValidator(JdtStandardAttribute.Path);
         }
 
         /// <inheritdoc/>
@@ -68,7 +69,7 @@ namespace Microsoft.VisualStudio.Jdt
 
             // The remove attribute only accepts objects if they have only the path attribute
             JToken pathToken;
-            if (attributes.TryGetValue(JdtAttributes.Path, out pathToken))
+            if (attributes.TryGetValue(JdtStandardAttribute.Path, out pathToken))
             {
                 if (pathToken.Type == JTokenType.String)
                 {

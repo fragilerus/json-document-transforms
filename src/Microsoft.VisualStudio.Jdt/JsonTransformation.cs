@@ -7,6 +7,7 @@ namespace Microsoft.VisualStudio.Jdt
     using System.IO;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
+    using Processors;
 
     /// <summary>
     /// Represents a transformation based on a JSON file using JDT

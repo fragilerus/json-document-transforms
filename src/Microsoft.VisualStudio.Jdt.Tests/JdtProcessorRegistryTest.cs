@@ -5,6 +5,7 @@ namespace Microsoft.VisualStudio.Jdt.Tests
 {
     using System;
     using Newtonsoft.Json.Linq;
+    using Processors;
     using Xunit;
 
     /// <summary>
@@ -80,6 +81,7 @@ namespace Microsoft.VisualStudio.Jdt.Tests
             public override void Process(JObject source, JObject transform, JsonTransformationContextLogger logger)
             {
                 this.callback();
+                this.Successor.Process(source, transform, logger);
             }
         }
     }

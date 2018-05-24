@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 
-namespace Microsoft.VisualStudio.Jdt
+namespace Microsoft.VisualStudio.Jdt.Processors
 {
     using System;
     using Newtonsoft.Json.Linq;
@@ -24,29 +24,16 @@ namespace Microsoft.VisualStudio.Jdt
         /// <summary>
         /// Gets the full verb corresponding the to the transformation
         /// </summary>
-        protected string FullVerb
-        {
-            get
-            {
-                return this.Verb == null ? null : JdtUtilities.JdtSyntaxPrefix + this.Verb;
-            }
-        }
+        protected string FullVerb => this.Verb == null ? null : JdtUtilities.JdtSyntaxPrefix + this.Verb;
 
         /// <summary>
         /// Gets the successor of the current transformation
         /// </summary>
         protected JdtProcessor Successor
         {
-            get
-            {
-                // Defaults to the end of chain processor
-                return this.successor ?? JdtEndOfChain.Instance;
-            }
-
-            private set
-            {
-                this.successor = value;
-            }
+            // Defaults to the end of chain processor
+            get => this.successor ?? JdtEndOfChain.Instance;
+            private set => this.successor = value;
         }
 
         /// <summary>
