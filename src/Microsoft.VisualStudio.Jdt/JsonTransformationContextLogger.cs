@@ -68,6 +68,32 @@ namespace Microsoft.VisualStudio.Jdt
         internal bool HasLoggedErrors { get; private set; }
 
         /// <summary>
+        /// Logs a warning according to the line info
+        /// </summary>
+        /// <param name="message">The warning message</param>
+        /// <param name="location">The file that caused the warning</param>
+        /// <param name="lineInfo">The information of the line that caused the warning</param>
+        public void LogWarning(string message, ErrorLocation location, IJsonLineInfo lineInfo)
+        {
+            if (string.IsNullOrEmpty(message))
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
+
+            if (this.externalLogger != null)
+            {
+                if (lineInfo != null && lineInfo.HasLineInfo())
+                {
+                    this.externalLogger.LogWarning(message, this.LocationPath(location), lineInfo.LineNumber, lineInfo.LinePosition);
+                }
+                else
+                {
+                    this.externalLogger.LogWarning(message, this.LocationPath(location));
+                }
+            }
+        }
+
+        /// <summary>
         /// Logs an error from an internal exception
         /// </summary>
         /// <param name="exception">The exception to log</param>
@@ -107,32 +133,6 @@ namespace Microsoft.VisualStudio.Jdt
             else
             {
                 ExceptionDispatchInfo.Capture(exception).Throw();
-            }
-        }
-
-        /// <summary>
-        /// Logs a warning according to the line info
-        /// </summary>
-        /// <param name="message">The warning message</param>
-        /// <param name="location">The file that caused the warning</param>
-        /// <param name="lineInfo">The information of the line that caused the warning</param>
-        internal void LogWarning(string message, ErrorLocation location, IJsonLineInfo lineInfo)
-        {
-            if (string.IsNullOrEmpty(message))
-            {
-                throw new ArgumentNullException(nameof(message));
-            }
-
-            if (this.externalLogger != null)
-            {
-                if (lineInfo != null && lineInfo.HasLineInfo())
-                {
-                    this.externalLogger.LogWarning(message, this.LocationPath(location), lineInfo.LineNumber, lineInfo.LinePosition);
-                }
-                else
-                {
-                    this.externalLogger.LogWarning(message, this.LocationPath(location));
-                }
             }
         }
 
