@@ -12,19 +12,24 @@ namespace Microsoft.VisualStudio.Jdt.Processors
     /// </summary>
     public static class JdtProcessorRegistry
     {
-        private static readonly IReadOnlyList<JdtProcessor> DefaultProcessors = new List<JdtProcessor>
+        private static readonly IReadOnlyList<JdtProcessor> DefaultProcessors;
+        private static readonly object Lock;
+        private static IList<JdtProcessor> processors;
+
+        static JdtProcessorRegistry()
         {
-            new JdtRecurse(),
-            new JdtRemove(),
-            new JdtReplace(),
-            new JdtRename(),
-            new JdtMerge(),
-            new JdtDefault()
-        };
-
-        private static readonly object Lock = new object();
-
-        private static IList<JdtProcessor> processors = DefaultProcessors.ToList();
+            Lock = new object();
+            DefaultProcessors = new List<JdtProcessor>
+            {
+                new JdtRecurse(),
+                new JdtRemove(),
+                new JdtReplace(),
+                new JdtRename(),
+                new JdtMerge(),
+                new JdtDefault()
+            };
+            processors = DefaultProcessors.ToList();
+        }
 
         /// <summary>
         /// The event that gets raised when the collection of processors gets changed

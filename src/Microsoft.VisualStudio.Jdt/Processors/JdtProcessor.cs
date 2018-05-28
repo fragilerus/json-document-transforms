@@ -11,7 +11,11 @@ namespace Microsoft.VisualStudio.Jdt.Processors
     /// </summary>
     public abstract partial class JdtProcessor
     {
-        private static readonly JdtProcessorChain ProcessorChain = new JdtProcessorChain();
+        /// <summary>The instance of the processor chain to be used</summary>
+        /// <remarks>
+        /// Needs to be lazy due to circular dependency issue with the <see cref="JdtProcessorRegistry"/>
+        /// </remarks>
+        private static readonly Lazy<JdtProcessorChain> ProcessorChain = new Lazy<JdtProcessorChain>();
         private JdtProcessor successor;
 
         /// <summary>
@@ -64,7 +68,7 @@ namespace Microsoft.VisualStudio.Jdt.Processors
             }
 
             // Passes in a clone of the transform object because it can be altered during the transformation process
-            ProcessorChain.Start(source, (JObject)transform.CloneWithLineInfo(), logger);
+            ProcessorChain.Value.Start(source, (JObject)transform.CloneWithLineInfo(), logger);
         }
     }
 }
